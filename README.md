@@ -34,6 +34,7 @@ where:
 - `[s-length]` 1-byte length descriptor for the s value that follows.
 - `[s-coordinate]` big-endian integer of 'minimum length'.
 
-The 'minimum length' means that an initial `0x00` bytes for r and s are not allowed, except when their highest bit is set (ie. when the first byte is above `0x7F`, a single `0x00` in front is required). What happens is that the highest bit specifies the sign of the value. However, for ECDSA the r and s values are positive integers, so the highest bit must not be set.
+The 'minimum length' means that an initial `0x00` byte for r and s is not allowed, except when their highest bit is set (ie. when the first byte is above `0x7F`, a single `0x00` in front is required).
+What happens is that the highest bit specifies the sign of the value. However, for ECDSA the r and s values are positive integers, so the highest bit must not be set.
 
 This results on average in 71 bytes signatures, as there are several header bytes, and the r and s values are variable length. Some examples:
