@@ -25,14 +25,14 @@ ECDSA signatures exhibits an structure like {r-coordinate INTEGER, s-coordinate 
 
 where:
 
-- `0x30`: a header byte indicating a compound structure.
-- 1-byte length descriptor for all what follows.
-- `0x02`: a header byte indicating an integer.
-- 1-byte length descriptor for the r value that follows.
-- The r-coordinate, as a big-endian integer of 'minimum length'.
-- `0x02`: a header byte indicating an integer.
-- 1-byte length descriptor for the s value that follows.
-- The s-coordinate, as a big-endian integer of 'minimum length'.
+- `[0x30]` header byte indicating a compound structure.
+- `[total-length]` 1-byte length descriptor for all what follows.
+- `[0x02]` header byte indicating an integer.
+- `[r-length]` 1-byte length descriptor for the r value that follows.
+- `[r-coordinate]` big-endian integer of 'minimum length'.
+- `[0x02]` header byte indicating an integer.
+- `[s-length]` 1-byte length descriptor for the s value that follows.
+- `[s-coordinate]` big-endian integer of 'minimum length'.
 
 The 'minimum length' means that an initial `0x00` bytes for r and s are not allowed, except when their highest bit is set (ie. when the first byte is above `0x7F`, a single `0x00` in front is required). What happens is that the highest bit specifies the sign of the value. However, for ECDSA the r and s values are positive integers, so the highest bit must not be set.
 
