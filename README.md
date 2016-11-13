@@ -17,3 +17,23 @@ Out[2]= {48,69,2,32,118,202,10,208,219,191,10,4,192,148,157,39,90,131,152,133,12
 In[3]:= StringJoin[ToUpperCase[IntegerString[DEREncoding[{r,s}],16,2]]]
 Out[3]= 3045022076CA0AD0DBBF0A04C0949D275A839885804A9795D6459D5AC293ACBE1FE3FEAB022100968210269B05EEBF05BE6ADAFE23249797C1556E20CFEC65FE21F34F5224F002
 ```
+
+##DER Encoding Format
+ECDSA signatures exhibits an structure like {r-coordinate INTEGER, s-coordinate INTEGER} and, when encoded in DER, this becomes the following sequence of bytes:
+
+`[0x30] [total-length] [0x02] [r-length] [r-coordinate] [0x02] [s-length] [s-coordinate]`
+
+where:
+
+- `0x30`: a header byte indicating a compound structure.
+- A 1-byte length descriptor for all what follows.
+- `0x02`: a header byte indicating an integer.
+- A 1-byte length descriptor for the r value that follows.
+- The r-coordinate, as a big-endian integer of 'minimum length'.
+- `0x02`: a header byte indicating an integer.
+- A 1-byte length descriptor for the s value that follows.
+- The s-coordinate, as a big-endian integer of 'minimum length'.
+
+The 'minimum length' means that an initial `0x00` bytes for r and s -coordinates are not allowed, except when their highest bit is set (in other words, when the first byte is above `0x7F`, a single `0x00` in front is required).
+
+This results in 71 bytes signatures (on average), as there are several header bytes, and the r and s valued are variable length.
