@@ -1,24 +1,20 @@
 # DER Encoding for Mathematica 9.0
 ##Overview
 Package for converting the ECDSA signature from the standard {r, s} format to the DER encoding. The main function is:
-- DEREncoding[{r, s}] returns the digital signature in the DER encoding format. The input r and s are a list of integers (from 0 to 255) and the output is also a list of integers (from 0 to 255).
+- DEREncoding[{r, s}] returns the ECDSA signature {r, s} in the DER encoding format. The input r and s are a list of strings representing hexadecimal numbers (from 0x00 to 0xFF) and the output is also a list of strings (from 0x00 to 0xFF).
 
 A simple usage example:
 ```Mathematica
-(* Load Package *)
+(* loading package *)
 In[1]:= Get[FileNameJoin[{NotebookDirectory[], "DEREncoding.m"}]]
 
-(* Generation of a random signature {r,s} *)
-In[2]:= {r,s}=Table[RandomInteger[255],{2},{32}]
-Out[2]= {{118,202,10,208,219,191,10,4,192,148,157,39,90,131,152,133,128,74,151,149,214,69,157,90,194,147,172,190,31,227,254,171},{150,130,16,38,155,5,238,191,5,190,106,218,254,35,36,151,151,193,85,110,32,207,236,101,254,33,243,79,82,36,240,2}}
+(* generation of a random signature {r,s} *)
+In[2]:= {r,s}=Table[IntegerString[RandomInteger[255],16,2],{2},{32}]
+Out[2]= {{40,fa,07,d1,94,66,b1,df,97,a6,a8,9e,86,b9,ff,4a,9e,ec,bd,fe,00,6a,b3,b5,85,7f,4f,96,fc,50,4c,f3},{30,8a,41,0d,c3,32,cd,31,de,db,b0,78,cf,b2,72,42,02,97,52,0b,49,85,a8,6c,4c,8f,51,4c,36,3f,1f,84}}
 
-(* Encoding to DER format *)
+(* encoding to DER format *)
 In[3]:= DEREncoding[{r,s}]
-Out[3]= {48,69,2,32,118,202,10,208,219,191,10,4,192,148,157,39,90,131,152,133,128,74,151,149,214,69,157,90,194,147,172,190,31,227,254,171,2,33,0,150,130,16,38,155,5,238,191,5,190,106,218,254,35,36,151,151,193,85,110,32,207,236,101,254,33,243,79,82,36,240,2}
-
-(* Visualizing the DER encoding output into the more usual hexadecimal format *)
-In[4]:= StringJoin[ToUpperCase[IntegerString[DEREncoding[{r,s}],16,2]]]
-Out[4]= 3045022076CA0AD0DBBF0A04C0949D275A839885804A9795D6459D5AC293ACBE1FE3FEAB022100968210269B05EEBF05BE6ADAFE23249797C1556E20CFEC65FE21F34F5224F002
+Out[3]= {30,44,02,20,40,fa,07,d1,94,66,b1,df,97,a6,a8,9e,86,b9,ff,4a,9e,ec,bd,fe,00,6a,b3,b5,85,7f,4f,96,fc,50,4c,f3,02,20,30,8a,41,0d,c3,32,cd,31,de,db,b0,78,cf,b2,72,42,02,97,52,0b,49,85,a8,6c,4c,8f,51,4c,36,3f,1f,84}
 ```
 
 ##DER Encoding Format
